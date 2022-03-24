@@ -7,6 +7,9 @@
             "label": "Serve",
             "type": "shell",
             "command": "bundle exec jekyll serve --livereload",
+            "options": {
+                "cwd": "/workspaces/blog/blog/"
+            },
             "group": {
                 "kind": "test",
                 "isDefault": true
@@ -17,6 +20,9 @@
             "label": "Build",
             "type": "shell",
             "command": "bundle exec jekyll build",
+            "options": {
+                "cwd": "/workspaces/blog/blog/"
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
