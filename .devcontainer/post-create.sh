@@ -10,3 +10,7 @@ fi
 if [ -f Gemfile ]; then
     bundle install
 fi
+
+cp ~/.ssh-host/id_rsa ~/.ssh/id_rsa 
+
+chmod 600 ~/.ssh/id_rsa
