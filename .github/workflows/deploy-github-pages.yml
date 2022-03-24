@@ -6,6 +6,12 @@ on:
       - master
     paths:
       - 'blog/**'
+  workflow_dispach:
+    inputs:
+      dummy:
+        description: 'Dummy value'
+        required: false
+        type: boolean
 
 jobs:
   github-pages:
