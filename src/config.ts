@@ -1,54 +1,143 @@
-import type{ NavItems } from './types'
+import type { Site, SocialObjects } from "./types";
 
-export const NAV_ITEMS: NavItems = {
-    home: {
-        path: '/',
-        title: 'home'
-    },
-    blog: {
-        path: '/blog',
-        title: 'blog'
-    },
-    tags: {
-        path: '/tags',
-        title: 'tags'
-    },
-    media: {
-        path: '/media',
-        title: 'media'
-    },
-    about: {
-        path: '/about',
-        title: 'about'
-    }
-}
+export const SITE: Site = {
+  website: "https://astro-paper.pages.dev/",
+  author: "Sat Naing",
+  desc: "A minimal, responsive and SEO-friendly Astro blog theme.",
+  title: "AstroPaper",
+  ogImage: "astropaper-og.jpg",
+  lightAndDarkMode: true,
+  postPerPage: 3,
+};
 
-export const SITE = {
-    // Your site's detail?
-    name: 'Ink',
-    title: 'Astro - Ink',
-    description: 'Crisp, minimal, personal blog theme for Astro',
-    url: 'https://astro-ink.vercel.app',
-    githubUrl: 'https://github.com/one-aalam/astro-ink',
-    listDrafts: true,
-    image: 'https://raw.githubusercontent.com/one-aalam/astro-ink/main/public/astro-banner.png',
-    // YT video channel Id (used in media.astro)
-    ytChannelId: '',
-    // Optional, user/author settings (example)
-    // Author: name
-    author: '', // Example: Fred K. Schott
-    // Author: Twitter handler
-    authorTwitter: '', // Example: FredKSchott
-    // Author: Image external source
-    authorImage: '', // Example: https://pbs.twimg.com/profile_images/1272979356529221632/sxvncugt_400x400.jpg, https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png
-    // Author: Bio
-    authorBio: 'Crisp, minimal, personal blog theme for Astro. Crisp, minimal, personal blog theme for Astro. Crisp, minimal, personal blog theme for Astro'
-}
+export const LOCALE = ["en-EN"]; // set to [] to use the environment default
 
-// Ink - Theme configuration
-export const PAGE_SIZE = 8
-export const USE_POST_IMG_OVERLAY = false
-export const USE_MEDIA_THUMBNAIL = true
+export const LOGO_IMAGE = {
+  enable: false,
+  svg: true,
+  width: 216,
+  height: 46,
+};
 
-export const USE_AUTHOR_CARD = true
-export const USE_SUBSCRIPTION = false /* works only when USE_AUTHOR_CARD is true */
+export const SOCIALS: SocialObjects = [
+  {
+    name: "Github",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: ` ${SITE.title} on Github`,
+    active: true,
+  },
+  {
+    name: "Facebook",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on Facebook`,
+    active: true,
+  },
+  {
+    name: "Instagram",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on Instagram`,
+    active: true,
+  },
+  {
+    name: "LinkedIn",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on LinkedIn`,
+    active: true,
+  },
+  {
+    name: "Mail",
+    href: "mailto:yourmail@gmail.com",
+    linkTitle: `Send an email to ${SITE.title}`,
+    active: false,
+  },
+  {
+    name: "Twitter",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on Twitter`,
+    active: false,
+  },
+  {
+    name: "Twitch",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on Twitch`,
+    active: false,
+  },
+  {
+    name: "YouTube",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on YouTube`,
+    active: false,
+  },
+  {
+    name: "WhatsApp",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on WhatsApp`,
+    active: false,
+  },
+  {
+    name: "Snapchat",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on Snapchat`,
+    active: false,
+  },
+  {
+    name: "Pinterest",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on Pinterest`,
+    active: false,
+  },
+  {
+    name: "TikTok",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on TikTok`,
+    active: false,
+  },
+  {
+    name: "CodePen",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on CodePen`,
+    active: false,
+  },
+  {
+    name: "Discord",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on Discord`,
+    active: false,
+  },
+  {
+    name: "GitLab",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on GitLab`,
+    active: false,
+  },
+  {
+    name: "Reddit",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on Reddit`,
+    active: false,
+  },
+  {
+    name: "Skype",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on Skype`,
+    active: false,
+  },
+  {
+    name: "Steam",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on Steam`,
+    active: false,
+  },
+  {
+    name: "Telegram",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on Telegram`,
+    active: false,
+  },
+  {
+    name: "Mastodon",
+    href: "https://github.com/satnaing/astro-paper",
+    linkTitle: `${SITE.title} on Mastodon`,
+    active: false,
+  },
+];
