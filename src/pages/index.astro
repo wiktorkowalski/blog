@@ -17,7 +17,7 @@ const sortedPosts = getSortedPosts(posts);
 const featuredPosts = sortedPosts
   .filter(({ data }) => data.featured)
   .filter(({ data }) => !data.draft)
-  .filter(({ data }) => data.pubDatetime.getTime() < new Date().getTime());
+  //.filter(({ data }) => data.pubDatetime.getTime() < new Date().getTime());
 
 const socialCount = SOCIALS.filter(social => social.active).length;
 ---
@@ -90,7 +90,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
           sortedPosts
             .filter(({ data }) => !data.featured)
             .filter(({ data }) => !data.draft)
-            .filter(({ data }) => data.pubDatetime.getTime() < new Date().getTime())
+            //.filter(({ data }) => data.pubDatetime.getTime() < new Date().getTime())
             .map(
               ({ data }, index) =>
                 index < SITE.postPerPage && (
