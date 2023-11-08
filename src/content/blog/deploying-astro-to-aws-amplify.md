@@ -4,6 +4,7 @@ pubDatetime: 2023-11-06T10:00:00.000Z
 title: Deploying Astro to AWS Amplify
 postSlug: deploying-astro-to-aws-amplify
 featured: false
+draft: true
 tags:
   - astro
   - aws
