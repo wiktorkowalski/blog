@@ -6,9 +6,10 @@ postSlug: live-feature-flags-with-aws-systems-manager-and-dotnet
 featured: true
 tags:
   - dotnet
-  - node.js
+  - asp.net
   - aws
-description: Implementing Feature Flags in .NET and Node.js using AWS Systems Manager
+  - featureflags
+description: Implementing Feature Flags in .NET using AWS Systems Manager
 ---
 
 # What are feature flags?
@@ -146,6 +147,8 @@ That's it!
 
 # How's that useful?
 
-Because the feature flags are not loaded through enviroinment variables at the application start but rather they're passed to controller with each request via dependency injection there's no need to restart the application to reload them.
+Live feature flags transform application management by allowing changes without restarts or deployments. By injecting these flags with each request, updates happen in real-time, significantly speeding up the process and enhancing responsiveness.
 
-This approach allows for much faster changes to the application's behaviour as there's no need to wait for deployment.
+However, this approach requires some changes in apps where entire configuration is based on enviroinment variables. You can no longer build config once at startup and use it as a singleton, so a proper usage of dependency injection is vital.
+
+Checkout [this post](https://blog.wiktorkowalski.pl/posts/live-feature-flags-with-aws-systems-manager-and-nodejs/) where i implement the same mechanism in Node.js
