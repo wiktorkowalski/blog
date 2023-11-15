@@ -65,34 +65,32 @@ import { SSMClient, GetParametersByPathCommand } from "@aws-sdk/client-ssm";
 
 @Injectable()
 export class SsmService implements OnModuleInit {
-  private ssm;
-  private featureFlags: FeatureFlags;
+  #ssm: SSMClient;
+  #featureFlags: FeatureFlags;
 
   constructor() {
-    this.ssm = new SSMClient();
+    this.#ssm = new SSMClient();
+    this.#featureFlags = {} as FeatureFlags;
   }
 
   async onModuleInit() {
     await this.loadFeatureFlags();
-    setInterval(() => this.loadFeatureFlags(), 5000); // remember to try-catch this!
+    setInterval(() => this.loadFeatureFlags(), 5000);
   }
 
   private async loadFeatureFlags() {
     const command = new GetParametersByPathCommand({
       Path: "/FeatureFlags",
     });
-    const response = await this.ssm.send(command);
-    this.featureFlags = response.Parameters.reduce((acc, param) => {
+    const response = await this.#ssm.send(command);
+    response.Parameters.forEach(param => {
       const key = param.Name.split("/").pop();
-      return {
-        ...acc,
-        [key]: param.Value === "true",
-      };
-    }, {} as FeatureFlags);
+      this.#featureFlags[key] = param.Value === "true";
+    });
   }
 
-  getFeatureFlags() {
-    return this.featureFlags;
+  get featureFlags() {
+    return this.#featureFlags;
   }
 }
 
@@ -122,7 +120,7 @@ export class FeatureFlagsController {
 
   @Get()
   getFeatureFlags() {
-    return this.ssmService.getFeatureFlags();
+    return this.ssmService.featureFlags;
   }
 }
 ```
@@ -146,9 +144,9 @@ Now the `GET /feature-flags` endpoint returns:
 
 ```json
 {
-  "featureA": true,
-  "featureB": false,
-  "featureC": true
+  "FeatureA": true,
+  "FeatureB": false,
+  "FeatureC": true
 }
 ```
 
@@ -168,9 +166,9 @@ and calling the `GET /feature-flags` endpoint again will return:
 
 ```json
 {
-  "featureA": false,
-  "featureB": true,
-  "featureC": false
+  "FeatureA": false,
+  "FeatureB": true,
+  "FeatureC": false
 }
 ```
 
