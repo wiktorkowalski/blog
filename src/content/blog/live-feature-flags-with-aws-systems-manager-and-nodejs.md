@@ -14,48 +14,49 @@ description: Implementing Feature Flags in Node.js using AWS Systems Manager
 
 # What are feature flags?
 
+Feature flags, also known as feature toggles, are a technique in modern software development that enables developers to turn certain functionalities on or off without altering the codebase. This approach facilitates controlled testing, phased rollouts, and the ability to quickly respond to issues by enabling or disabling features in real-time. By decoupling deployment and feature release, feature flags provide a flexible mechanism for managing and iterating on software features in various environments.
+
 # Setup in AWS
 
 I'm gonna assume you've got your AWS account and AWS CLI set up, so we're gonna skip that part.  
 I'm also gonna assume you have created an empty Nest.js project, and have basic knowledge about Nest.js.
 
-Let's start by creating a parameter
+Let's start by creating a parameter:
 
 ```bash
 aws ssm put-parameter --name "/FeatureFlags/FeatureA" --value "true" --type String
 ```
 
-and then some more
+and then some more:
 
 ```bash
 aws ssm put-parameter --name "/FeatureFlags/FeatureB" --value "false" --type String
 aws ssm put-parameter --name "/FeatureFlags/FeatureC" --value "true" --type String
 ```
 
-and now let's check one just to be sure
+and now let's check one just to be sure:
 
 ```bash
 aws ssm get-parameter --name "/FeatureFlags/FeatureA"
 ```
 
-and list them all
+and list them all:
 
 ```bash
 aws ssm describe-parameters --filters "Key=Name,Values=/FeatureFlags/"
 ```
 
-That's all we need to do for now in AWS, let's move to code example
+That's all we need to do for now in AWS, let's move to code example.
 
 # Configuration
 
-Here's what you need to do:  
-Install required package
+First, install required package:
 
 ```bash
 npm install --save @aws-sdk/client-ssm
 ```
 
-and add a service class that will make sure feature flags have up to date values
+and add a service class that will make sure feature flags have up to date values:
 
 ```ts
 // /src/ssm.service.ts
@@ -108,7 +109,7 @@ That takes care of the configuration.
 
 # Usage
 
-Now the `SsmService` is available to be passed to the controller where we can use FeatureFlags
+Now the `SsmService` is available to be passed to the controller where we can use FeatureFlags.
 
 ```ts
 // src/feature-flags/feature-flags.controller.ts
@@ -126,7 +127,7 @@ export class FeatureFlagsController {
 }
 ```
 
-Remember to add everything necessary to `app.module.ts`
+Remember to add everything necessary to `app.module.ts`.
 
 ```ts
 import { Module } from "@nestjs/common";
@@ -141,7 +142,7 @@ import { SsmService } from "./ssm.service";
 export class AppModule {}
 ```
 
-Now the `GET /feature-flags` endpoint returns
+Now the `GET /feature-flags` endpoint returns:
 
 ```json
 {
@@ -151,11 +152,11 @@ Now the `GET /feature-flags` endpoint returns
 }
 ```
 
-Now let's get to the magic part
+Now let's get to the magic part.
 
 # Live reload of config values
 
-While keeping the app running, let's change the parameter values
+While keeping the app running, let's change the parameter values:
 
 ```bash
 aws ssm put-parameter --name "/FeatureFlags/FeatureA" --value "false" --type String --overwrite
@@ -163,7 +164,7 @@ aws ssm put-parameter --name "/FeatureFlags/FeatureB" --value "true" --type Stri
 aws ssm put-parameter --name "/FeatureFlags/FeatureC" --value "false" --type String --overwrite
 ```
 
-and calling the `GET /featureflags` endpoint again will return
+and calling the `GET /feature-flags` endpoint again will return:
 
 ```json
 {
@@ -181,4 +182,4 @@ Live feature flags transform application management by allowing changes without 
 
 However, this approach requires some changes in apps where entire configuration is based on enviroinment variables. You can no longer build config once at startup and use it as a singleton, so a proper usage of dependency injection is vital.
 
-Checkout [this post](https://blog.wiktorkowalski.pl/posts/live-feature-flags-with-aws-systems-manager-and-dotnet/) where i implement the same mechanism in .NET
+Checkout [this post](https://blog.wiktorkowalski.pl/posts/live-feature-flags-with-aws-systems-manager-and-dotnet/) where I implement the same mechanism in .NET!
