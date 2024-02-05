@@ -14,25 +14,27 @@ tags:
 description: Hosting a static Astro website on AWS S3 and CloudFront using Terraform and CI/CD
 ---
 
-# What you're gonna learn
+# What you're going to learn
 
-I'm gonna show you how to deploy your static Astro site to AWS S3, add CloudFront CDN and attach your Route 53 domain with custom ACM certificate to all that.  
-Both CloudFront and Route 53 are not required for all that to work, but it's a nice package when it's all used together.  
-If you don't want to use a custom domain and CDN you'd have to skip some of the Terraform and pipelines setup.
+I'm going to show you how to deploy your static Astro site to AWS S3, add CloudFront CDN and attach your Route 53 domain with custom ACM certificate to all that.
 
 Some assumptions:
 
-- Having a AWS account
-- Having a Route 53 domain
+- Having an AWS account
 - Basic knowledge about Terraform and CI/CD pipelines
+- Basic knowledge about AWS services used here
+- Having a Route 53 domain
 
 I'll try to explain as I'm going through what needs to be set up, but I might skip over some basics.  
 Everything shown here and required for the setup to work is in [this repo](https://github.com/wiktorkowalski/astro-s3-cloudfront-terraform-example) i case you want to look just at the code.
 
+Both CloudFront and Route 53 are not required for all that to work, but it's a nice package when it's all used together.  
+If you don't want to use a custom domain and CDN you'd have to skip some of the Terraform and pipelines setup by yourself or check out [this branch](https://github.com/wiktorkowalski/astro-s3-cloudfront-terraform-example/tree/simplified-s3-only) with just S3 set up.
+
 # Astro site
 
-Astro site itself is not really important here, so we're gonna use auto-generated one.
-It doesn't even has to be Astro site, just any static site framework that on build generates `*/index.html` files.
+The Astro site itself is not really important at this moment, so we're gonna use auto-generated one.
+It doesn't even have to be an Astro site, just any static site framework that on build generates `*/index.html` files.
 
 So let's create the simplest Astro website:
 
@@ -43,11 +45,11 @@ npm create astro@latest
 give your project any name you want and you can select all the defaults options that Astro template has.
 
 Then you can run `npm run dev` just to check if the website starts.  
-Once that's taken care of we can move to more interesting parts.
+Once that's taken care of, we can move to more interesting parts.
 
 # Terraform
 
-That's were the most of the interesting stuff happens.  
+That's where the most of the interesting stuff happens.  
 Let's start by setting up Terraform itself
 
 In the repo root folder run
@@ -72,7 +74,7 @@ provider "aws" {
   region  = "eu-west-1"
 }
 
-# this one is needed for ssl cert
+# this one is needed for SSL cert
 provider "aws" {
   alias   = "us-east-1"
   region  = "us-east-1"
@@ -186,7 +188,7 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
 }
 ```
 
-then a CloudFront distribution
+Then a CloudFront distribution
 
 ```hcl
 # cloudfront.tf
@@ -318,7 +320,7 @@ resource "aws_acm_certificate" "cert" {
 # Deployment pipeline
 
 For all I care you can run `terraform apply` and then `s3 sync` by yourself.  
-If that's not fancy enough for you, then let's go over a basic pipeline that's gonna do all that for you.
+If that's not fancy enough for you, then let's go over a basic pipeline that's going to do all that for you.
 
 Main steps that you want to take each time changes were commites is:
 
@@ -461,7 +463,7 @@ jobs:
 
 # Summary
 
-This setup gives you quick and easy way to deploy static Astro websites to AWS using Terraform.
+This setup gives you a quick and easy way to deploy static Astro websites to AWS using Terraform.
 
 Remember that repo with everything required is available [here](https://github.com/wiktorkowalski/astro-s3-cloudfront-terraform-example).  
 Also, a branch with simplified setup that skips CloudFront, Route53 and ACM is available on the branch [here](https://github.com/wiktorkowalski/astro-s3-cloudfront-terraform-example/tree/simplified-s3-only).
