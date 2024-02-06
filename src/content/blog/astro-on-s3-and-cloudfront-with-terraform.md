@@ -58,7 +58,8 @@ In the repo root folder run
 mkdir infra && cd infra
 ```
 
-and create first Terraform file containing provider definitions
+and create first Terraform file containing provider definitions.  
+Two providers are needed, because ACM certificates have to be created in `us-east-1` region, while all other resources can be created in any other region.
 
 ```hcl
 terraform {
@@ -83,36 +84,19 @@ provider "aws" {
 
 then you can run `terraform init` to setup terraform and load provider.
 
-Create a `varaibles.tf` file to have a single place with variables:
+Create a `terraform.tfvars` file to have a single place with parameters:
 
 ```hcl
-# variables.tf
-variable "main_domain_name" {
-  description = "The main domain name"
-  type        = string
-  default = "example.com"
-}
+# terraform.tfvars
+dns_zone_name       = "example.com"
+main_domain_name    = "example.com"
+domain_aliases      = ["another.example.com"]
+website_bucket_name = "example-bucket"
+aws_region          = "eu-west-1"
 
-variable "domain_aliases" {
-  description = "The domain aliases"
-  type        = list(string)
-  default = ["www.example.com"]
-}
-
-variable "website_bucket_name" {
-  description = "The name of the S3 bucket for the website"
-  type        = string
-  default = "example-website"
-}
-
-variable "aws_region" {
-  description = "Main AWS region"
-  type        = string
-  default = "eu-west-1"
-}
 ```
 
-Now let's create a S3 bucket for static website files
+Now let's create a S3 bucket for static website files. Fortunatley, S3 has some features geared towards hosting static websites, hence we're using `aws_s3_bucket_website_configuration` resource to make this setup easier.
 
 ```hcl
 # s3.tf
@@ -188,7 +172,7 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
 }
 ```
 
-Then a CloudFront distribution
+Then create a CloudFront distribution.
 
 ```hcl
 # cloudfront.tf
