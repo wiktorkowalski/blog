@@ -1,0 +1,110 @@
+---
+import { formatDate, slugify, type Post } from "../lib/posts";
+interface Props {
+  posts: Post[];
+  label?: string;
+}
+const { posts, label = "NAS-01" } = Astro.props;
+---
+
+<section class="unit nas" aria-label="Posts">
+  <div class="head">
+    <span class="label">{label}</span>
+    <span class="label">
+      {posts.length} {posts.length === 1 ? "disk" : "disks"}
+    </span>
+  </div>
+  <ol>
+    {posts.map((post, i) => (
+      <li class="bay">
+        <div class="leds" aria-hidden="true">
+          <span class="led"></span>
+          <span class:list={["led", "amber", { off: i > 0 }]}></span>
+        </div>
+        <div class="body">
+          <span class="label">
+            DISK-{String(i).padStart(2, "0")} ·{" "}
+            <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+            {post.data.draft && " · draft"}
+          </span>
+          <h2>
+            <a href={`/${post.id}/`}>{post.data.title}</a>
+          </h2>
+          <p>{post.data.description}</p>
+          {post.data.tags.length > 0 && (
+            <ul class="tags">
+              {post.data.tags.map((t) => (
+                <li>
+                  <a class="tag" href={`/tags/${slugify(t)}/`}>
+                    {t}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  .nas {
+    padding: 0.75rem 1.75rem 1rem;
+  }
+  .head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .bay {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: repeating-linear-gradient(90deg, #0000 0 3px, #ffffff05 3px 4px), var(--metal-lo);
+    border: 1px solid var(--edge);
+    border-radius: 3px;
+    box-shadow: 0 2px 0 #0006 inset;
+  }
+  .leds {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.3rem;
+  }
+  .body {
+    min-width: 0;
+  }
+  h2 {
+    font-size: 1.2rem;
+    line-height: 1.35;
+    margin: 0.4rem 0 0.3rem;
+  }
+  h2 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  h2 a:hover {
+    color: var(--link);
+    text-decoration: underline;
+  }
+  p {
+    margin: 0 0 0.6rem;
+    color: var(--muted);
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+</style>

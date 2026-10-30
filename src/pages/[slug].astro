@@ -1,0 +1,83 @@
+---
+import { render } from "astro:content";
+import Base from "../layouts/Base.astro";
+import Toc from "../components/Toc.astro";
+import { formatDate, getPosts, readingTime, slugify, type Post } from "../lib/posts";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props as { post: Post };
+const { Content, headings } = await render(post);
+const { title, description, date, updated, tags } = post.data;
+---
+
+<Base title={title} description={description} ogImage={`/og/${post.id}.png`} type="article">
+  <article>
+    <header class="meta">
+      <p class="label">
+        <span class="led" aria-hidden="true"></span>
+        <time datetime={date.toISOString()}>{formatDate(date)}</time>
+        {updated && (
+          <>
+            {" "}
+            · updated <time datetime={updated.toISOString()}>{formatDate(updated)}</time>
+          </>
+        )}
+        · {readingTime(post.body)} min read
+      </p>
+      <h1>{title}</h1>
+      <p class="desc">{description}</p>
+      {tags.length > 0 && (
+        <ul class="tags">
+          {tags.map((t) => (
+            <li>
+              <a class="tag" href={`/tags/${slugify(t)}/`}>
+                {t}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </header>
+    <Toc headings={headings} />
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .meta {
+    border-bottom: 1px solid var(--edge);
+    padding-bottom: 1.25rem;
+  }
+  .meta .label {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    text-transform: none;
+  }
+  h1 {
+    font-size: clamp(1.75rem, 5vw, 2.4rem);
+    line-height: 1.2;
+    margin: 0.75rem 0 0.5rem;
+  }
+  .desc {
+    color: var(--muted);
+    margin: 0 0 1rem;
+    font-size: 1.125rem;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+</style>

@@ -1,0 +1,5 @@
+# Old AstroPaper URLs
+/posts/:slug/ /:slug/ 301
+/posts/:slug /:slug/ 301
+/posts / 301
+/posts/ / 301

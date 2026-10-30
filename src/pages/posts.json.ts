@@ -1,19 +1,16 @@
-import { getCollection } from "astro:content";
-import getSortedPosts from "@utils/getSortedPosts";
-import slugify from "@utils/slugify";
+import { SITE } from "../consts";
+import { getPosts } from "../lib/posts";
 
-export async function get() {
-  const posts = await getCollection("blog");
-  const sortedPosts = getSortedPosts(posts);
-  return {
-    body: JSON.stringify(sortedPosts.map(({ data }) => ({
-      link: `posts/${slugify(data)}`,
-      title: data.title,
-      description: data.description,
-      pubDate: new Date(data.pubDatetime),
-    }))),
-    headers: {
-      "content-type": "application/json",
-    },
-  };
+// Read by wiktorkowalski.pl at build time to show the latest posts.
+export async function GET() {
+  const posts = await getPosts();
+  return Response.json(
+    posts.map((post) => ({
+      title: post.data.title,
+      description: post.data.description,
+      date: post.data.date.toISOString(),
+      tags: post.data.tags,
+      url: `${SITE.url}/${post.id}/`,
+    })),
+  );
 }
