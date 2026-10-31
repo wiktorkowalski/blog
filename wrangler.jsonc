@@ -5,6 +5,8 @@
     "directory": "./dist",
     "not_found_handling": "404-page",
   },
+  // PR branches: `wrangler preview` needs this block.
+  "previews": {},
   // DNS record (AAAA 100::, proxied) lives in cloudflare-terraform.
   "routes": [{ "pattern": "blog.wiktorkowalski.pl/*", "zone_name": "wiktorkowalski.pl" }],
 }
