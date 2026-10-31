@@ -1,0 +1,83 @@
+---
+import { NAV, SITE } from "../consts";
+const path = Astro.url.pathname;
+const active = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
+---
+
+<header class="unit panel">
+  <a href="/" class="brand">
+    <span class="led" aria-hidden="true"></span>
+    <span class="name">{SITE.title}</span>
+    <span class="label">blog</span>
+  </a>
+  <nav aria-label="Main">
+    <ul>
+      {NAV.map((item, i) => (
+        <li>
+          <a href={item.href} aria-current={active(item.href) ? "page" : undefined}>
+            <span class="port" aria-hidden="true">
+              <span class:list={["led", { off: !active(item.href) }]}></span>
+            </span>
+            <span class="label">{String(i + 1).padStart(2, "0")}</span>
+            <span>{item.label}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .panel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    margin: 1rem 0 2.5rem;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .name {
+    font: 700 1rem/1 var(--mono);
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 44px;
+    padding: 0 0.6rem;
+    font: 0.875rem/1 var(--mono);
+    color: var(--text);
+    text-decoration: none;
+    border-radius: 2px;
+  }
+  nav a:hover {
+    background: #ffffff0a;
+  }
+  nav a[aria-current="page"] {
+    color: var(--link);
+  }
+  .port {
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 14px;
+    background: #07090a;
+    border: 1px solid var(--edge);
+    border-radius: 2px;
+  }
+</style>

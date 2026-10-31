@@ -1,0 +1,50 @@
+---
+import type { MarkdownHeading } from "astro";
+interface Props {
+  headings: MarkdownHeading[];
+}
+const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{items.length > 2 && (
+  <details class="toc">
+    <summary>
+      <span class="label">Contents</span>
+    </summary>
+    <ol>
+      {items.map((h) => (
+        <li class:list={{ sub: h.depth === 3 }}>
+          <a href={`#${h.slug}`}>{h.text}</a>
+        </li>
+      ))}
+    </ol>
+  </details>
+)}
+
+<style>
+  .toc {
+    border: 1px solid var(--edge);
+    border-radius: 3px;
+    padding: 0.5rem 1rem;
+    margin: 1.5rem 0 2rem;
+    background: var(--metal-lo);
+  }
+  summary {
+    cursor: pointer;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+  }
+  ol {
+    list-style: none;
+    margin: 0.5rem 0;
+    padding: 0;
+    font-size: 0.95rem;
+  }
+  li {
+    padding: 0.15rem 0;
+  }
+  .sub {
+    padding-left: 1rem;
+  }
+</style>

@@ -1,0 +1,87 @@
+---
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/700.css";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "../styles/global.css";
+import PatchPanel from "../components/PatchPanel.astro";
+import { SITE, SOCIALS } from "../consts";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  type?: "website" | "article";
+}
+const { title, description = SITE.description, ogImage = "/og.png", type = "website" } = Astro.props;
+const fullTitle = title ? `${title} | ${SITE.title}` : `${SITE.title} | blog`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const image = new URL(ogImage, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title ?? SITE.title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#0c0e10" />
+  </head>
+  <body>
+    <a class="skip" href="#main">
+      Skip to content
+    </a>
+    <div class="wrap">
+      <PatchPanel />
+      <main id="main">
+        <slot />
+      </main>
+      <footer class="unit foot">
+        <span class="label">PDU-01</span>
+        <ul>
+          {SOCIALS.map((s) => (
+            <li>
+              <a href={s.href}>{s.label}</a>
+            </li>
+          ))}
+        </ul>
+        <span class="label">
+          © {new Date().getFullYear()} {SITE.author}
+        </span>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style>
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin: 4rem 0 1.5rem;
+  }
+  .foot ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .foot a {
+    font: 0.875rem/2.75 var(--mono);
+  }
+</style>

@@ -1,24 +1,32 @@
 ---
-import { getCollection } from "astro:content";
-import Header from "@components/Header.astro";
-import Footer from "@components/Footer.astro";
-import Layout from "@layouts/Layout.astro";
-import Main from "@layouts/Main.astro";
-import Tag from "@components/Tag.astro";
-import getUniqueTags from "@utils/getUniqueTags";
-import { SITE } from "@config";
-
-const posts = await getCollection("blog");
-
-let tags = getUniqueTags(posts);
+import Base from "../../layouts/Base.astro";
+import { getPosts, getTags } from "../../lib/posts";
+const tags = [...getTags(await getPosts()).entries()].sort((a, b) => a[1].name.localeCompare(b[1].name));
 ---
 
-<Layout title={`Tags | ${SITE.title}`}>
-  <Header activeNav="tags" />
-  <Main pageTitle="Tags" pageDesc="All the tags used in posts.">
-    <ul>
-      {tags.map(tag => <Tag name={tag} size="lg" />)}
-    </ul>
-  </Main>
-  <Footer />
-</Layout>
+<Base title="Tags">
+  <h1>Tags</h1>
+  <ul class="list">
+    {tags.map(([slug, t]) => (
+      <li>
+        <a class="tag" href={`/tags/${slug}/`}>
+          {t.name} <span aria-label={`${t.posts.length} posts`}>· {t.posts.length}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</Base>
+<style>
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+  }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+  }
+</style>
